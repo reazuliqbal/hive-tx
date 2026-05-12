@@ -15,7 +15,7 @@ import { callRPC, RPCError } from './helpers/call'
 import { DigestData } from './types'
 import { sleep } from './helpers/sleep'
 
-const chainId = hexToBytes(config.chain_id)
+const getChainId = () => hexToBytes(config.chain_id)
 
 interface TransactionOptions {
   transaction?: TransactionType | Transaction
@@ -164,7 +164,7 @@ export class Transaction {
     buffer.flip()
     const transactionData = new Uint8Array(buffer.toBuffer())
     const txId = bytesToHex(sha256(transactionData)).slice(0, 40)
-    const digest = sha256(new Uint8Array([...chainId, ...transactionData]))
+    const digest = sha256(new Uint8Array([...getChainId(), ...transactionData]))
     return { digest, txId }
   }
 
